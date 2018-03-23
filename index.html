@@ -4,10 +4,44 @@
     <meta charset="utf-8">
     <title>Rock, Paper, Scissors</title>
   </head>
+  <button type="button" id="rock">Rock</button>
+  <button type="button" id="paper">Paper</button>
+  <button type="button" id="scissors">Scissors</button>
+  <div class="score" id="score">
+    <p>Player Score: </p><p id="playerscore">0</p>
+    <p>Computer Score: </p><p id="computerscore">0</p>
+  </div>
   <body>
     <script type="text/javascript">
+
+      // Select score elements
+      var score = document.querySelector('#score')
+      var playerScore = document.querySelector('#playerscore');
+      var computerScore = document.querySelector('#computerscore');
+
+      //Create round and game winner plus restart button
+      var roundWinner = document.createElement('h4');
+      var gameWinner = document.createElement('h3')
+      var restartGame = document.createElement('button')
+      restartGame.textContent = "Restart Game"
+      restartGame.addEventListener('click', () => {
+          playerScore.textContent = playerWin;
+          computerScore.textContent = computerWin;
+          gameWinner.textContent = "";
+          roundWinner.textContent = "";
+          score.removeChild(restartGame);
+      })
+
+      //Select rock,paper,scissors buttons
+      var rock = document.querySelector('#rock');
+      var paper = document.querySelector('#paper');
+      var scissors = document.querySelector('#scissors');
+
+      // Set scores to 0
       let playerWin = 0;
       let computerWin = 0;
+
+      //Random choice for computers turn
       function computerPlay () {
         let computerChoice = Math.floor(Math.random() * Math.floor(3));
         if (computerChoice == 0) {
@@ -19,68 +53,81 @@
           return "scissors";
           }
       }
+
+      //Listen for mouse click on rock,paper scissors buttons
+      rock.addEventListener('click', () => {
+        playerSelection = "rock";
+        game();
+      })
+      paper.addEventListener('click', () => {
+        playerSelection = "paper";
+        game();
+      })
+      scissors.addEventListener('click', () => {
+        playerSelection = "scissors";
+        game();
+      })
+
+      //Play a game of rock paper scissors
       function game() {
+
+        //Play a round of rock paper scissors
         function playRound (playerSelection,computerSelection) {
             if (playerSelection == "rock" && computerSelection == "scissors") {
               playerWin += 1;
-              return "You Win! Rock beats Scissors";
+              playerScore.textContent = playerWin;
+              roundWinner.textContent = "You Win! Rock beats Scissors"
             } else if (playerSelection == "rock" && computerSelection == "paper") {
                 computerWin += 1;
-                return "You Lose! Paper beats Rock";
+                computerScore.textContent = computerWin;
+                roundWinner.textContent = "You Lose! Paper beats Rock";
             } else if (playerSelection == "paper" && computerSelection == "rock") {
                 playerWin += 1;
-                return "You Win! Paper beats Rock";
+                playerScore.textContent = playerWin;
+                roundWinner.textContent = "You Win! Paper beats Rock";
             } else if (playerSelection == "paper" && computerSelection == "scissors"){
                 computerWin += 1;
-                return "You Lose! Scissors beats paper";
+                computerScore.textContent = computerWin;
+                roundWinner.textContent = "You Lose! Scissors beats paper";
             } else if (playerSelection == "scissors" && computerSelection == "paper") {
                 playerWin += 1;
-                return "You Win! Scissors beats Paper";
+                playerScore.textContent = playerWin;
+                roundWinner.textContent = "You Win! Scissors beats Paper";
             } else if (playerSelection == "scissors" && computerSelection == "rock"){
                 computerWin += 1;
-                return "You Lose! Rock beats Scissors";
+                computerScore.textContent = computerWin;
+                roundWinner.textContent = "You Lose! Rock beats Scissors";
             } else {
-                return "It was a draw!"
+                roundWinner.textContent = "It was a draw!"
               }
+            score.appendChild(roundWinner);
           }
-          //Round 1
+
+
           let computerSelection = computerPlay();
-          let playerSelection = prompt("Choose your move").toLowerCase();
-          console.log(playRound(playerSelection, computerSelection))
-          console.log(playerWin)
-          console.log(computerWin)
-          //Round 2
-          computerSelection = computerPlay();
-          playerSelection = prompt("Choose your move").toLowerCase();
-          console.log(playRound(playerSelection, computerSelection))
-          console.log(playerWin)
-          console.log(computerWin)
-          //Round 3
-          computerSelection = computerPlay();
-          playerSelection = prompt("Choose your move").toLowerCase();
-          console.log(playRound(playerSelection, computerSelection))
-          console.log(playerWin)
-          console.log(computerWin)
-          //Round 4
-          computerSelection = computerPlay();
-          playerSelection = prompt("Choose your move").toLowerCase();
-          console.log(playRound(playerSelection, computerSelection))
-          console.log(playerWin)
-          console.log(computerWin)
-          //Round 5
-          computerSelection = computerPlay();
-          playerSelection = prompt("Choose your move").toLowerCase();
-          console.log(playRound(playerSelection, computerSelection))
-          console.log(playerWin)
-          console.log(computerWin)
-          if (playerWin > computerWin) {
-            return "You won! Well done!"
-          } else if (playerWin == computerWin) {
-            return "It was a draw"
-          } else {
-            return "You lost!"
+          playRound(playerSelection, computerSelection);
+
+          //Determine who is first to 5 rounds
+          if (playerWin == 5) {
+            gameWinner.textContent = "You won the game!"
+            playerWin = 0;
+            computerWin = 0;
+            score.appendChild(restartGame);
+            return;
           }
+          else if (computerWin == 5) {
+            gameWinner.textContent = "Computer has won the game!"
+            playerWin = 0;
+            computerWin = 0;
+            score.appendChild(restartGame);
+            return;
+          }
+
+          //Show the winner of the game
+          score.appendChild(gameWinner);
+
       }
+
     </script>
   </body>
 </html>
